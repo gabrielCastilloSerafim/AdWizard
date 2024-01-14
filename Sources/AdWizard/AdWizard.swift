@@ -1,13 +1,26 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
+//
+//  AdWizard.swift
+//  AppWizard
+//
+//  Created by Gabriel Castillo Serafim on 14/1/24.
+//
 
 public final class AdWizard {
     
-    public init() {
-        
+    let apiKey: String
+    let netWorkLayer = NetworkLayer()
+    
+    public var campaingId: String? {
+        didSet {
+            registerUserDowload()
+        }
     }
     
-    public func printSome() {
-        print("Some")
+    public init(apiKey: String) {
+        self.apiKey = apiKey
+    }
+    
+    func registerUserDowload() {
+        netWorkLayer.sendEvent(apiKey: apiKey, campaingId: campaingId)
     }
 }
