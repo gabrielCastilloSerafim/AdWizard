@@ -9,12 +9,12 @@ import Foundation
 
 final class NetworkLayer {
     
-    private let baseURL = "http://127.0.0.1:3000"
+    private let baseURL = "https://adwizardapi-production.up.railway.app/helloLosPibes"
     
     func sendEvent(apiKey: String, campaingId: String?) {
         
         guard let campaingId,
-              let URL = URL(string: "\(baseURL)/campaing") else { return }
+              let URL = URL(string: "\(baseURL)") else { return }
         
         Task {
             
