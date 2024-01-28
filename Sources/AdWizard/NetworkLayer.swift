@@ -9,7 +9,7 @@ import Foundation
 
 final class NetworkLayer {
     
-    private let baseURL = "https://adwizardapi-production.up.railway.app/"
+    private let baseURL = "https://adwizardapi-production.up.railway.app"
     
     func ping() async throws -> PingResponse {
         
