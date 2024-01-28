@@ -31,6 +31,10 @@ public final class AdWizard {
                     pingResponse.userId,
                     forKey: "userId")
                 
+                UserDefaults.standard.setValue(
+                    true,
+                    forKey: "downloadRegistered")
+                
             } catch {
                 debugPrint(error)
             }
