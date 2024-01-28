@@ -7,8 +7,15 @@
 
 import Foundation
 
-struct Campaing: Codable {
-    let campaingId: String
+struct PingResponse: Decodable {
+    let userId: String
+    let campaignId: String
+}
+
+struct Event: Encodable {
+    let name: String
+    let campaignId: String
+    let userId: String
 }
 
 enum HttpMethods: String {

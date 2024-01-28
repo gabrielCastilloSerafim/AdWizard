@@ -9,25 +9,33 @@ import Foundation
 
 final class NetworkLayer {
     
-    private let baseURL = "https://adwizardapi-production.up.railway.app/helloLosPibes"
+    private let baseURL = "https://adwizardapi-production.up.railway.app/"
     
-    func sendEvent(apiKey: String, campaingId: String?) {
+    func ping() async throws -> PingResponse {
         
-        guard let campaingId,
-              let URL = URL(string: "\(baseURL)") else { return }
+        guard let URL = URL(string: "\(baseURL)/ping") else { throw URLError(.badURL) }
         
-        Task {
-            
-            let requestBody = Campaing(campaingId: campaingId)
-            
-            var request = URLRequest(url: URL)
-            request.httpMethod = HttpMethods.POST.rawValue
-            request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
-            request.httpBody = try JSONEncoder().encode(requestBody)
-            
-            let (data, response) = try await URLSession.shared.data(for: request)
-            debugPrint(data)
-            debugPrint(response)
-        }
+        var request = URLRequest(url: URL)
+        request.httpMethod = HttpMethods.GET.rawValue
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        return try JSONDecoder().decode(PingResponse.self, from: data)
+    }
+    
+    func registerEvent(eventName: String, campaignId: String, userId: String) async throws {
+        
+        guard let URL = URL(string: "\(baseURL)/event") else { return }
+        let requestBody = Event(name: eventName, campaignId: campaignId, userId: userId)
+        
+        var request = URLRequest(url: URL)
+        request.httpMethod = HttpMethods.POST.rawValue
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONEncoder().encode(requestBody)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        debugPrint(data)
+        debugPrint(response)
     }
 }

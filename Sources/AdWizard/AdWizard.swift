@@ -5,22 +5,48 @@
 //  Created by Gabriel Castillo Serafim on 14/1/24.
 //
 
+import Foundation
+
 public final class AdWizard {
     
-    let apiKey: String
-    let netWorkLayer = NetworkLayer()
+    let networkLayer = NetworkLayer()
     
-    public var campaingId: String? {
-        didSet {
-            registerUserDowload()
+    public func registerDowload() {
+        
+        guard UserDefaults.standard.bool(forKey: "downloadRegistered") == false else { return }
+        
+        Task {
+            do {
+                let pingResponse = try await networkLayer.ping()
+                
+                UserDefaults.standard.setValue(
+                    pingResponse.campaignId,
+                    forKey: "campaignId")
+                
+                UserDefaults.standard.setValue(
+                    pingResponse.userId,
+                    forKey: "userId")
+                
+            } catch {
+                debugPrint(error)
+            }
         }
     }
     
-    public init(apiKey: String) {
-        self.apiKey = apiKey
-    }
-    
-    func registerUserDowload() {
-        netWorkLayer.sendEvent(apiKey: apiKey, campaingId: campaingId)
+    public func sendEvent(eventName: String) {
+        
+        guard let campaignId = UserDefaults.standard.string(forKey: "campaignId"),
+              let userId = UserDefaults.standard.string(forKey: "userId") else { return }
+        
+        Task {
+            do {
+                try await networkLayer.registerEvent(
+                    eventName: eventName,
+                    campaignId: campaignId,
+                    userId: userId)
+            } catch {
+                debugPrint(error)
+            }
+        }
     }
 }
