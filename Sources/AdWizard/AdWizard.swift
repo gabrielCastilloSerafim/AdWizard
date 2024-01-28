@@ -9,7 +9,11 @@ import Foundation
 
 public final class AdWizard {
     
-    let networkLayer = NetworkLayer()
+    let networkLayer: NetworkLayer
+    
+    public init() {
+        self.networkLayer = NetworkLayer()
+    }
     
     public func registerDowload() {
         
