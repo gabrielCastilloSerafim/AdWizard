@@ -13,7 +13,7 @@ final class NetworkLayer {
     
     func ping() async throws -> PingResponse {
         
-        guard let URL = URL(string: "\(baseURL)/ping") else { throw URLError(.badURL) }
+        guard let URL = URL(string: "\(baseURL)/event/ping") else { throw URLError(.badURL) }
         
         var request = URLRequest(url: URL)
         request.httpMethod = HttpMethods.GET.rawValue
