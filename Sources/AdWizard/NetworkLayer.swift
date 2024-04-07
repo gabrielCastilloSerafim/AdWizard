@@ -11,7 +11,7 @@ final class NetworkLayer {
     
     private let baseURL = "https://adwizardserver-production.up.railway.app"
     
-    func ping() async throws -> Consumer {
+    func performMatch() async throws -> Consumer {
         
         guard let URL = URL(string: "\(baseURL)/event/match") else { throw URLError(.badURL) }
         
