@@ -28,8 +28,8 @@ public final class AdWizard {
                     forKey: "campaignId")
                 
                 UserDefaults.standard.setValue(
-                    pingResponse.userId,
-                    forKey: "userId")
+                    pingResponse.consumerId,
+                    forKey: "consumerId")
                 
                 UserDefaults.standard.setValue(
                     true,
@@ -44,14 +44,14 @@ public final class AdWizard {
     public func sendEvent(eventName: String) {
         
         guard let campaignId = UserDefaults.standard.string(forKey: "campaignId"),
-              let userId = UserDefaults.standard.string(forKey: "userId") else { return }
+              let consumerId = UserDefaults.standard.string(forKey: "consumerId") else { return }
         
         Task {
             do {
                 try await networkLayer.registerEvent(
                     eventName: eventName,
                     campaignId: campaignId,
-                    userId: userId)
+                    consumerId: consumerId)
             } catch {
                 debugPrint(error)
             }
