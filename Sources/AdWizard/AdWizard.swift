@@ -21,7 +21,7 @@ public final class AdWizard {
         
         Task {
             do {
-                let pingResponse = try await networkLayer.ping()
+                let pingResponse = try await networkLayer.performMatch()
                 
                 UserDefaults.standard.setValue(
                     pingResponse.campaignId,
