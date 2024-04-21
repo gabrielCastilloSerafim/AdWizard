@@ -9,19 +9,20 @@ import Foundation
 
 public final class AdWizard {
     
-    let networkLayer: NetworkLayer
+    let networkLayer = NetworkLayer()
+    let apiKey: String
     
-    public init() {
-        self.networkLayer = NetworkLayer()
+    public init(apiKey: String) {
+        self.apiKey = apiKey
     }
     
-    public func registerDowload() {
+    public func registerDowload(apiKey: String) {
         
         guard UserDefaults.standard.bool(forKey: "downloadRegistered") == false else { return }
         
         Task {
             do {
-                let pingResponse = try await networkLayer.performMatch()
+                let pingResponse = try await networkLayer.performMatch(apiKey: apiKey)
                 
                 UserDefaults.standard.setValue(
                     pingResponse.campaignId,
@@ -51,7 +52,8 @@ public final class AdWizard {
                 try await networkLayer.registerEvent(
                     eventName: eventName,
                     campaignId: campaignId,
-                    consumerId: consumerId)
+                    consumerId: consumerId,
+                    apiKey: apiKey)
             } catch {
                 debugPrint(error)
             }

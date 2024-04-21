@@ -9,22 +9,23 @@ import Foundation
 
 final class NetworkLayer {
     
-    private let baseURL = "https://adwizardserver-production.up.railway.app"
+    private let baseURL = "https://adwizard.up.railway.app/api/v1"
     
-    func performMatch() async throws -> Consumer {
+    func performMatch(apiKey: String) async throws -> Consumer {
         
         guard let URL = URL(string: "\(baseURL)/event/match") else { throw URLError(.badURL) }
         
         var request = URLRequest(url: URL)
         request.httpMethod = HttpMethods.GET.rawValue
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        request.setValue(apiKey, forHTTPHeaderField: "apiKey")
         
         let (data, _) = try await URLSession.shared.data(for: request)
         
         return try JSONDecoder().decode(Consumer.self, from: data)
     }
     
-    func registerEvent(eventName: String, campaignId: String, consumerId: String) async throws {
+    func registerEvent(eventName: String, campaignId: String, consumerId: String, apiKey: String) async throws {
         
         guard let URL = URL(string: "\(baseURL)/event") else { return }
         let requestBody = Event(name: eventName, campaignId: campaignId, relatedConsumerId: consumerId)
