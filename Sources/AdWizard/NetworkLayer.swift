@@ -34,6 +34,7 @@ final class NetworkLayer {
         request.httpMethod = HttpMethods.POST.rawValue
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         request.httpBody = try JSONEncoder().encode(requestBody)
+        request.setValue(apiKey, forHTTPHeaderField: "apiKey")
         
         let (data, response) = try await URLSession.shared.data(for: request)
         debugPrint(data)
