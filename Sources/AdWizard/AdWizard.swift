@@ -16,7 +16,7 @@ public final class AdWizard {
         self.apiKey = apiKey
     }
     
-    public func registerDowload(apiKey: String) {
+    public func registerDowload() {
         
         guard UserDefaults.standard.bool(forKey: "downloadRegistered") == false else { return }
         
