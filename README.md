@@ -1,4 +1,4 @@
-# AdWizard iOS & MacOS SDK 🧙🏻‍♂️
+# AdWizard iOS & macOS SDK 🧙🏻‍♂️
 ## Overview 💡
 The AdWizard iOS SDK is a simple tool that you can use to send events from your app directly to AdWizard's server. The AdWizard SDK has a public class `AdWizard`that is a singleton with two public methods, one for configuration and another for sending events, for more details see documentation below.
 
