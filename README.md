@@ -1,4 +1,4 @@
-# AdWizard iOS SDK 🧙🏻‍♂️
+# AdWizard iOS & MacOS SDK 🧙🏻‍♂️
 ## Overview 💡
 The AdWizard iOS SDK is a simple tool that you can use to send events from your app directly to AdWizard's server. The AdWizard SDK has a public class `AdWizard`that is a singleton with two public methods, one for configuration and another for sending events, for more details see documentation below.
 
@@ -11,7 +11,6 @@ import AdWizard
 
 AdWizard.shared.configure(apiKey: "YOUR_API_KEY")
 ```
-
 
 ## Send events 📬
 AdWizard SDK automatically sends a `download` event when you call the `configure` method if its needed, so don't worry about the download events, we take care of everything. If you want to send custom events like a purchase or login event for example you can use the `sendEvent` method and pass the name of the event that you want to send.
