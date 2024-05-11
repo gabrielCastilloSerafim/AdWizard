@@ -9,54 +9,46 @@ import Foundation
 
 public final class AdWizard {
     
-    let networkLayer = NetworkLayer()
-    let apiKey: String
+    private let networkLayer = NetworkLayer()
+    private var apiKey: String?
+    private init() {}
     
-    public init(apiKey: String) {
+    public static let shared = AdWizard()
+    
+    public func configure(apiKey: String) {
         self.apiKey = apiKey
-    }
-    
-    public func registerDowload() {
-        
-        guard UserDefaults.standard.bool(forKey: "downloadRegistered") == false else { return }
-        
-        Task {
-            do {
-                let pingResponse = try await networkLayer.performMatch(apiKey: apiKey)
-                
-                UserDefaults.standard.setValue(
-                    pingResponse.campaignId,
-                    forKey: "campaignId")
-                
-                UserDefaults.standard.setValue(
-                    pingResponse.consumerId,
-                    forKey: "consumerId")
-                
-                UserDefaults.standard.setValue(
-                    true,
-                    forKey: "downloadRegistered")
-                
-            } catch {
-                debugPrint(error)
-            }
-        }
+        registerDowloadIfNeeded()
     }
     
     public func sendEvent(eventName: String) {
+        
+        guard let apiKey else {
+            debugPrint("⚠️ AdWizard Warning: Trying to send event with no API Key available, please execute configure method and provide an API Key.")
+            return
+        }
         
         guard let campaignId = UserDefaults.standard.string(forKey: "campaignId"),
               let consumerId = UserDefaults.standard.string(forKey: "consumerId") else { return }
         
         Task {
-            do {
-                try await networkLayer.registerEvent(
-                    eventName: eventName,
-                    campaignId: campaignId,
-                    consumerId: consumerId,
-                    apiKey: apiKey)
-            } catch {
-                debugPrint(error)
-            }
+            try? await networkLayer.registerEvent(
+                eventName: eventName,
+                campaignId: campaignId,
+                consumerId: consumerId,
+                apiKey: apiKey)
+        }
+    }
+    
+    private func registerDowloadIfNeeded() {
+        
+        guard let apiKey, UserDefaults.standard.bool(forKey: "downloadRegistered") == false else { return }
+        
+        Task {
+            guard let pingResponse = try? await networkLayer.performMatch(apiKey: apiKey) else { return }
+            
+            UserDefaults.standard.setValue(pingResponse.campaignId, forKey: "campaignId")
+            UserDefaults.standard.setValue(pingResponse.consumerId, forKey: "consumerId")
+            UserDefaults.standard.setValue(true, forKey: "downloadRegistered")
         }
     }
 }
